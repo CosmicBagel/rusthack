@@ -1,0 +1,9 @@
+[package]
+name = "rusthack"
+version = "0.1.0"
+authors = ["CosmicBagel <sam@cosmicbagel.com>"]
+
+[dependencies]
+user32-sys = "0.2.0"
+winapi = "0.2.8"
+kernel32-sys = "0.2.2"
