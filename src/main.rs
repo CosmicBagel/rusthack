@@ -6,10 +6,10 @@ extern crate winapi; //for console drawing
 
 use std::{thread, time}; //just for taking naps
 
-use winapi::winnt::WCHAR;
-use winapi::wincon::{CHAR_INFO, COORD, SMALL_RECT};
-use winapi::winuser::{VK_DOWN, VK_ESCAPE, VK_LEFT, VK_RIGHT, VK_UP};
-use winapi::winbase::STD_OUTPUT_HANDLE;
+use winapi::winnt::WCHAR; //for CHAR_INFO struct
+use winapi::wincon::{CHAR_INFO, COORD, SMALL_RECT}; //required for WriteConsoleOutputW
+use winapi::winuser::{VK_DOWN, VK_ESCAPE, VK_LEFT, VK_RIGHT, VK_UP}; //specific virtual key codes
+use winapi::winbase::STD_OUTPUT_HANDLE; //code number used to get the handle of the console window
 
 
 struct KeyStates {
@@ -88,10 +88,10 @@ fn draw_scene(screen_buffer: [[char; 6]; 6]) {
     //     pub Attributes: WORD, (remember WORD is 2 bytes)
     // }
     let char_array = screen_buffer_to_char_info_array(screen_buffer);
-    let buffer_size: COORD = COORD {X: 5, Y:5};
+    let buffer_size: COORD = COORD {X: 6, Y:6};
     let buffer_coordinates: COORD = COORD {X:0, Y:0};
     let screen_write_region: *mut SMALL_RECT = &mut SMALL_RECT {
-        Top:0, Left:0, Right:5, Bottom:5};
+        Top:1, Left:0, Right:6, Bottom:6};
     // BOOL WINAPI WriteConsoleOutput(
     // _In_          HANDLE      hConsoleOutput,
     // _In_    const CHAR_INFO   *lpBuffer,
@@ -117,11 +117,11 @@ fn screen_buffer_to_char_info_array<'a>(buffer: [[char; 6]; 6]) -> [CHAR_INFO; 3
         Attributes: 0,
     }; 36];
     let mut counter = 0;
-    for row in 0..5 {
-        for col in 0..5 {
+    for row in 0..6 {
+        for col in 0..6 {
             char_info[counter] = CHAR_INFO {
-                UnicodeChar: '\u{0041}' as WCHAR,
-                Attributes: 0,
+                UnicodeChar: buffer[row][col] as WCHAR,
+                Attributes: 0x000f,
             };
             counter += 1;
         }
